@@ -1,0 +1,56 @@
+
+// Fonts
+@import url("https://fonts.googleapis.com/css?family=Raleway:300,400,600");
+
+// Variables
+@import "variables";
+
+// Bootstrap
+@import '~bootstrap/scss/bootstrap';
+@import '~bootstrap-slider/src/sass/bootstrap-slider.scss';
+@import "~bootstrap-datepicker/dist/css/bootstrap-datepicker3.min.css";
+
+@import '~chosen-js/chosen.css';
+
+.navbar-laravel {
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+}
+
+.tooltip{
+    opacity: 0.9;
+}
+
+.form-group{
+  padding-top: 30px;
+}
+
+.slider.slider-horizontal{
+  width: 100%;
+  height: 10px;
+  .slider-track{
+    height: 30px;
+  }
+  .slider-handle{
+    width: 30px;
+    height: 30px;
+  }
+}
+.container1{
+ margin: 0px 100px;
+}
+.justify-content-center{
+  text-align: left;
+  h1,h3,.alert{
+    text-align: center;
+  }
+
+  table.table{
+    tr.old td{
+      background: #31cc54;
+    }
+    tr.current td{
+      background: #3abcfd;
+    }
+  }
+}
