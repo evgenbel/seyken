@@ -1,20 +1,25 @@
 <template>
     <table class="table">
         <tr>
-            <th v-for="point in currentPoints">{{ point.name }}</th>
+            <th>Место</th>
+            <th>Участник</th>
+            <th>Год рождения</th>
+            <th>Баллы</th>
         </tr>
-        <tr>
-            <td v-for="point in currentPoints">{{ point.point|rounded}}</td>
+        <tr v-for="competitor in competitors" :class="{disabled:competitor.disabled}">
+            <td>{{competitor.num}}</td>
+            <td>{{competitor.fio}}</td>
+            <td>{{competitor.date_birth.date | moment("YYYY")}}</td>
+            <td>{{competitor.point|rounded}}</td>
         </tr>
     </table>
 </template>
 
 <script>
     export default {
-        // props:['point'],
         data: function(){
           return {
-              currentPoints: [],
+              competitors: [],
               interval:{}
           }
         },
@@ -29,8 +34,8 @@
         },
         methods: {
             loadData: function(){
-                axios.get('api/points').then(function(response){
-                    this.currentPoints =  response.data;
+                axios.get('api/roundResult').then(function(response){
+                    this.competitors =  response.data;
                 }.bind(this), function(response){
                     // error callback
                     console.log(response);

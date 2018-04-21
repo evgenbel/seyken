@@ -20,18 +20,32 @@ class Home extends AdminController
 				$result = [];
 				$c = Competition::current()->first();
 				for($r = $c->round; $r>0; $r--){
+            $result_c = [];
 						foreach ($c->competitors as $competitor){
 								$points = [];
 								foreach ($competitor->points as $point){
+								    if ($point->round!=$r)
+								        continue;
 										$points[$point->user_id][$point->point_type] = $point->point * $point->kata->koef;
 								}
-								$result[$r][$competitor->id] = $competitor;
-								$result[$r][$competitor->id]->list_point = $points;
-								$result[$r][$competitor->id]->point = round($competitor->getPointRound($r), 2);
+                $competitor->list_point = $points;
+                $competitor->point  = round($competitor->getPointRound($r), 2);
+								$result_c[] = (object)[
+								    'point' => round($competitor->getPointRound($r), 2),
+								    'list_point' => $points,
+								    'disabled_round' => $competitor->disabled_round,
+								    'is_current' => $competitor->is_current,
+								    'kata' => $competitor->kata->name??'-',
+								    'id' => $competitor->id,
+								    'fio' => $competitor->user->fio,
+                ];
+								//$competitor;
 						}
-						usort($result[$r], function($a1, $a2){
-								return ($a1->point??0)-($a2->point??0);
+						usort($result_c, function($a1, $a2){
+                $res = ($a2->point??0)-($a1->point??0);
+                return $res>0?1:(($res<0)?-1:0);
 						});
+						$result[$r] = $result_c;
 				}
 
 				return view('admin.home',[
@@ -58,7 +72,7 @@ class Home extends AdminController
 				return redirect('/admin');
     }
 
-		public function startround(Request $request)
+		public function disbaledround(Request $request)
 		{
 				$this->validate($request, [
 						'exclude' => 'required',
@@ -70,6 +84,12 @@ class Home extends AdminController
 					$cc->disabled_round = $c->round;
 					$cc->save();
 				}
+				return redirect('/admin');
+    }
+
+		public function nextround()
+		{
+				$c = Competition::current()->first();
 				$c->round++;
 				$c->save();
 				return redirect('/admin');
@@ -79,6 +99,7 @@ class Home extends AdminController
         $c = Competition::current()->first();
         foreach($c->competitors as $comp){
             $comp->is_current = 0;
+            $comp->kate_id = 0;
             $comp->save();
         }
         return redirect('/admin');

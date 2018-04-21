@@ -34,6 +34,7 @@
           return default_data;
         },
         mounted() {
+            this.loadData();
             this.interval = setInterval(function(){
                 this.loadData();
             }.bind(this), 4000);

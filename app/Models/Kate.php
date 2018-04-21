@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Kate extends Model
 {
+    protected $fillable = ['name', 'koef'];
     //
 		public function competitions()
 		{

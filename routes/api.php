@@ -39,7 +39,36 @@ Route::get('/points', function () {
 		$c = App\Models\Competition::current()->first();
 		if ($c){
 				$cc = $c->currentCompetitor->first();
-				$points = $cc->roundPoints();
+				$points = [];
+				if ($cc){
+            $points = $cc->roundPoints();
+        }
 		}
 		return $points;
+});
+
+Route::get('/roundResult', function () {
+		$c = App\Models\Competition::current()->first();
+		if ($c){
+		    $result = [];
+		    foreach ($c->competitors as $competitor){
+		        if ($competitor->disabled_round>0 && $competitor->disabled_round<$c->round)
+		            continue;
+            $competitor->point = $competitor->getPointRound($c->round);
+		        $result[] = [
+		            'fio'   =>  $competitor->user->fio,
+                'disabled'  =>  $competitor->disabled_round==$c->round,
+		            'date_birth'   =>  $competitor->user->date_birth,
+		            'point'   =>  $competitor->getPointRound($c->round)
+            ];
+        }
+        usort($result, function($a1, $a2){
+            $res = ($a2['point']??0)-($a1['point']??0);
+            return $res>0?1:(($res<0)?-1:0);
+        });
+		    foreach ($result as $k=>&$item){
+		        $item['num'] = $k+1;
+        }
+		}
+		return $result;
 });

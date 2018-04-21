@@ -86,7 +86,7 @@ class WelcomeController extends Controller
 		{
 				$this->middleware('auth');
 				$this->validate($request, [
-						'kata' => 'required|exists:kates,id',
+						'kata' => 'required',
 						'action' => 'required|exists:competitor_competitions,id,is_current,1',
 				]);
 

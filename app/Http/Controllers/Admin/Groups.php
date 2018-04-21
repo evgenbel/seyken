@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Kate;
+use App\Models\Group;
 use Illuminate\Http\Request;
 
-class Kates extends AdminController
+class Groups extends AdminController
 {
 
     /**
@@ -15,10 +15,10 @@ class Kates extends AdminController
      */
     public function index()
     {
-				$kates = Kate::paginate(10);
+				$groups = Group::paginate(10);
 
-				return view('admin.kate.list', [
-						'kates'	=>	$kates
+				return view('admin.group.list', [
+						'groups'	=>	$groups
 				]);
     }
 
@@ -29,7 +29,7 @@ class Kates extends AdminController
      */
     public function create()
     {
-				return view('admin.kate.create');
+				return view('admin.group.create');
     }
 
     /**
@@ -44,12 +44,11 @@ class Kates extends AdminController
 						'name' => 'required|max:255',
 				]);
 
-				Kate::create([
-						'name' => $request->name,
-						'koef' => str_replace(",", ".", $request->koef)
+				Group::create([
+						'name' => $request->name
 				]);
 
-				return redirect(route('admin.kate'));
+				return redirect(route('admin.group'));
     }
 
     /**
@@ -69,11 +68,11 @@ class Kates extends AdminController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Kate $kate)
+    public function edit(Group $group)
     {
         //
-				return view('admin.kate.edit', [
-						'kate'	=>	$kate
+				return view('admin.group.edit', [
+						'group'	=>	$group
 				]);
     }
 
@@ -84,18 +83,17 @@ class Kates extends AdminController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Kate $kate)
+    public function update(Request $request, Group $group)
     {
         //
 				$this->validate($request, [
 						'name' => 'required|max:255',
 				]);
 
-				$kate->name = $request->name;
-				$kate->koef = str_replace(",", ".", $request->koef);
-				$kate->save();
+        $group->name = $request->name;
+        $group->save();
 
-				return redirect(route('admin.kate'));
+				return redirect(route('admin.group'));
     }
 
     /**

@@ -46,6 +46,9 @@
                         <li>
                             <a class="nav-link" href="{{ route('admin.user') }}">Судьи</a>
                         </li>
+                        <li>
+                            <a class="nav-link" href="{{ route('admin.group') }}">Категории</a>
+                        </li>
                     </ul>
 
                     <!-- Right Side Of Navbar -->

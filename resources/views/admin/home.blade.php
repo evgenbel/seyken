@@ -5,7 +5,7 @@
         <div class="row justify-content-center">
             @foreach($list as $round=>$competitors)
                 <h3>Раунд {{ $round }}</h3>
-                <form method="post" action="{{ route('startround') }}">
+                <form method="post" action="{{ route('disbaledround') }}">
                     @csrf
                     <table class="table">
                         <tr>
@@ -30,18 +30,19 @@
                                 @endforeach
                             @endforeach
                         </tr>
-                        @foreach($competitors as $k=>$competitor)
+                        @foreach($list[$round] as $k=>$competitor)
                             @if($competitor->disabled_round>0 && $competitor->disabled_round<$round)
                                 @continue;
                             @endif
-                            <tr @if($competitor->is_current && $currentRound==$round) class="current" @endif>
+                            <tr @if($competitor->disabled_round>0  && $competitor->disabled_round==$round) class="disabled" @endif
+                            @if($competitor->is_current && $currentRound==$round) class="current" @endif>
                                 @if ($currentRound==$round)
                                     <td><input type="checkbox" name="exclude[]" value="{{ $competitor->id }}"></td>
                                 @endif
-                                <td>{{ $k }}</td>
-                                <td>{{ $competitor->user->fio }}</td>
+                                <td>{{ $k+1 }}</td>
+                                <td>{{ $competitor->fio }}</td>
                                 <td>{{ $competitor->point }}</td>
-                                <td>{{ $competitor->kata->name??'-' }}</td>
+                                <td>{{ $competitor->kata??'-' }}</td>
                                 @if ($currentRound==$round)
                                     <td>
                                         @if($competitor->point>0)
@@ -66,8 +67,9 @@
                         @endforeach
                     </table>
                     @if ($currentRound==$round)
-                        <a href="{{ route('endround') }}" class="btn btn-primary">Итоговая таблица зрителям</a>
-                        <button class="btn btn-primary">Исключить и начать следующий раунд</button>
+                        <a href="{{ route('endround') }}" class="btn btn-primary">Раунд окончен</a>
+                        <button class="btn btn-primary">Исключить участников</button>
+                        <a href="{{ route('nextround') }}" class="btn btn-primary">Следующий раунд</a>
                     @endif
                 </form>
             @endforeach

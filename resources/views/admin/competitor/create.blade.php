@@ -8,7 +8,6 @@
                 <a href="{{ route('admin.competitor') }}" class="btn btn-primary">Отмена</a>
             </div>
             <br/>
-
             <form method="POST" action="{{ route('admin.competitor.store') }}">
                 @csrf
 
@@ -28,7 +27,27 @@
                 </div>
 
                 <div class="form-group row">
-                    <label for="koef" class="col-md-4 col-form-label text-md-right">Город</label>
+                    <label for="group_id" class="col-md-4 col-form-label text-md-right">Категория</label>
+
+                    <div class="col-md-6">
+                        <select id="group_id" name="group_id" class="chosen">
+                            @foreach($groups as $item)
+                                <option value="{{ $item->id }}">
+                                    {{ $item->name }}
+                                </option>
+                            @endforeach
+                        </select>
+
+                        @if ($errors->has('group_id'))
+                            <span class="invalid-feedback">
+                                        <strong>{{ $errors->first('group_id') }}</strong>
+                                    </span>
+                        @endif
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="city" class="col-md-4 col-form-label text-md-right">Город</label>
 
                     <div class="col-md-6">
                         <input id="city" type="text" value="{{ old('city') }}"
@@ -43,7 +62,7 @@
                 </div>
 
                 <div class="form-group row">
-                    <label for="koef" class="col-md-4 col-form-label text-md-right">Школа карате</label>
+                    <label for="school" class="col-md-4 col-form-label text-md-right">Школа карате</label>
 
                     <div class="col-md-6">
                         <input id="school" type="text" value="{{ old('school') }}"
@@ -62,7 +81,10 @@
 
                     <div class="col-md-6">
                         <input id="date_birth" type="text" value="{{ old('date_birth') }}"
-                               class="form-control{{ $errors->has('date_birth') ? ' is-invalid' : '' }}" name="date_birth" required>
+                               class="form-control{{ $errors->has('date_birth') ? ' is-invalid' : '' }}" name="date_birth" required
+                               data-provide="datepicker"
+                               data-date-language="ru"
+                               data-date-format="dd.mm.yyyy">
 
                         @if ($errors->has('date_birth'))
                             <span class="invalid-feedback">

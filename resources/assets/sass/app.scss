@@ -49,6 +49,9 @@
     tr.old td{
       background: #31cc54;
     }
+    tr.disabled td{
+      background: #cc748b;
+    }
     tr.current td{
       background: #3abcfd;
     }

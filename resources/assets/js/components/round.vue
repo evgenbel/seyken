@@ -14,6 +14,7 @@
           }
         },
         mounted() {
+            this.fetchRound();
             this.interval = setInterval(function(){
                 this.fetchRound();
             }.bind(this), 3000);

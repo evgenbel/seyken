@@ -12,6 +12,7 @@
             <table class="table">
                 <tr>
                     <td>ФИО</td>
+                    <td>Категория</td>
                     <td>Город</td>
                     <td>Школа</td>
                     <td>Дата рождения</td>
@@ -21,9 +22,10 @@
                 @foreach($competitors as $competitor)
                     <tr>
                         <td>{{ $competitor->fio }}</td>
+                        <td>{{ $competitor->group->name??'' }}</td>
                         <td>{{ $competitor->city }}</td>
                         <td>{{ $competitor->school }}</td>
-                        <td>{{ $competitor->date_birth }}</td>
+                        <td>{{ $competitor->date_birth->format('d.m.Y') }}</td>
                         <td>{{ $competitor->weight }}</td>
                         <td><a href="{{ route('admin.competitor.edit', ['id'=>$competitor->id]) }}">Редактировать</a></td>
                     </tr>

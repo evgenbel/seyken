@@ -22,7 +22,8 @@ Route::get('/home', 'HomeController@index');
 Route::get('/admin', 'Admin\Home@index');
 Route::get('/next/{id}', 'Admin\Home@next')->name('nextCompetitor');
 Route::get('/endround', 'Admin\Home@endround')->name('endround');
-Route::post('/startround', 'Admin\Home@startround')->name('startround');
+Route::post('/disbaledround', 'Admin\Home@disbaledround')->name('disbaledround');
+Route::get('/nextround', 'Admin\Home@nextround')->name('nextround');
 
 Route::namespace('Admin')->prefix('admin')->name('admin.')->group(function(){
 		Route::resource('competitions', 'Competitions', [
@@ -62,6 +63,16 @@ Route::namespace('Admin')->prefix('admin')->name('admin.')->group(function(){
 						'store'	=>	'user.store',
 						'edit'	=>	'user.edit',
 						'update'	=>	'user.update',
+				]
+		]);
+
+		Route::resource('group', 'Groups', [
+				'names'	=>	[
+						'index'	=>	'group',
+						'create'	=>	'group.new',
+						'store'	=>	'group.store',
+						'edit'	=>	'group.edit',
+						'update'	=>	'group.update',
 				]
 		]);
 

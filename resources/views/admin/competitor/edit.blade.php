@@ -29,6 +29,26 @@
                 </div>
 
                 <div class="form-group row">
+                    <label for="group_id" class="col-md-4 col-form-label text-md-right">Категория</label>
+
+                    <div class="col-md-6">
+                        <select id="group_id" name="group_id" class="chosen">
+                            @foreach($groups as $item)
+                                <option value="{{ $item->id }}" {{ $item->id==$competitor->group_id?'selected':'' }}>
+                                    {{ $item->name }}
+                                </option>
+                            @endforeach
+                        </select>
+
+                        @if ($errors->has('group_id'))
+                            <span class="invalid-feedback">
+                                        <strong>{{ $errors->first('group_id') }}</strong>
+                                    </span>
+                        @endif
+                    </div>
+                </div>
+
+                <div class="form-group row">
                     <label for="koef" class="col-md-4 col-form-label text-md-right">Город</label>
 
                     <div class="col-md-6">
@@ -62,8 +82,12 @@
                     <label for="date_birth" class="col-md-4 col-form-label text-md-right">Дата рождения</label>
 
                     <div class="col-md-6">
-                        <input id="date_birth" type="text" value="{{ $competitor->date_birth }}"
-                               class="form-control{{ $errors->has('date_birth') ? ' is-invalid' : '' }}" name="date_birth" required>
+                        <input id="date_birth" type="text" value="{{ $competitor->date_birth->format('d.m.Y') }}"
+                               class="form-control{{ $errors->has('date_birth') ? ' is-invalid' : '' }}" name="date_birth" required
+                               data-provide="datepicker"
+                               data-date-language="ru"
+                               data-date-format="dd.mm.yyyy"
+                        >
 
                         @if ($errors->has('date_birth'))
                             <span class="invalid-feedback">

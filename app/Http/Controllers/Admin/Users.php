@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class Users extends AdminController
 {
@@ -49,7 +50,7 @@ class Users extends AdminController
 				User::create([
 						'name' => $request->name,
 						'email' => $request->email,
-						'set_kata' => $request->set_kata,
+						'set_kata' => $request->set_kata??0,
 						'password' => Hash::make($request->password)
 				]);
 
@@ -93,14 +94,15 @@ class Users extends AdminController
         //
 				$this->validate($request, [
 						'name' => 'required|string|max:255',
-						'email' => 'required|string|email|max:255|unique:users',
-						'password' => 'required|string|min:6|confirmed',
+						'email' => 'required|string|email|max:255',
+//						'password' => 'string|min:6|confirmed',
 				]);
 
 				$user->name = $request->name;
 				$user->email = $request->email;
-				$user->set_kata = $request->set_kata;
-				$user->password = Hash::make($request->password);
+				$user->set_kata = $request->set_kata??0;
+				if ($request->password && $request->password==$request->password_confirmation)
+				    $user->password = Hash::make($request->password);
 				$user->save();
 
 				return redirect(route('admin.user'));

@@ -29,7 +29,7 @@
                 </div>
 
                 <div class="form-group row">
-                    <label for="koef" class="col-md-4 col-form-label text-md-right">Начало</label>
+                    <label for="koef" class="col-md-4 col-form-label text-md-right">Коэффициент</label>
 
                     <div class="col-md-6">
                         <input id="koef" type="text" class="form-control{{ $errors->has('koef') ? ' is-invalid' : '' }}"

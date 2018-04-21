@@ -14,6 +14,7 @@ class Competitor extends Model
 
     protected $fillable = [
     		'fio',
+    		'group_id',
     		'city',
     		'school',
     		'date_birth',
@@ -24,5 +25,10 @@ class Competitor extends Model
 		public function competitions()
 		{
 				return $this->hasMany('App\Models\CompetitorCompetition');
+		}
+
+		public function group()
+		{
+				return $this->belongsTo(Group::class);
 		}
 }

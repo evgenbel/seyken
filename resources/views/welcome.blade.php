@@ -44,13 +44,16 @@
                 <h1>
                     {{ $competition->name }}
                 </h1>
-                <h3>Проводится с {{ $competition->start }} по {{ $competition->end }}</h3>
+                <h3>Проводится с {{ $competition->start->format('d.m.Y')}} по {{ $competition->end->format('d.m.Y') }}</h3>
                 @if($competition->round>0)
                     <competition-round label="{{ __('Round') }}" round="{{ $competition->round }}"></competition-round>
-                    {{--<div class="alert alert-primary" id="round-field">--}}
-                        {{--Раунд {{ $competition->round }}--}}
-                    {{--</div>--}}
                     <div class="block">
+                        @guest
+
+                        @else
+                            <h2>Судья {{ Auth::user()->name }}</h2>
+                        @endguest
+
                         @forelse($competition->currentCompetitor as $c)
                             <div id="result-block">
                                 <competition-info
@@ -59,33 +62,8 @@
                                         :point="{{ $point }}"
                                 ></competition-info>
 
-                                {{--<div class="alert alert-primary" role="alert">--}}
-                                    {{--Выступает боец:--}}
-                                    {{--{{ $c->user->fio }}--}}
-                                    {{--{{ $c->user->date_birth->format("Y")}} г.р.--}}
-                                    {{--<br/>Вес: {{ $c->weight }} кг.--}}
-
-                                    {{--<span v-if="$c->kate_id"><br/>Ката: {{ $c->kata->name }}</span>--}}
-
-
-                                    {{--<div class="h2 text-danger">Общий балл {{ $point }}</div>--}}
-                                {{--</div>--}}
-
                                 @guest
                                     <table-result></table-result>
-                                    <round-table></round-table>
-                                    {{--<table class="table">--}}
-                                        {{--<tr>--}}
-                                            {{--@foreach($result as $point)--}}
-                                                {{--<th>{{ $point->name }}</th>--}}
-                                            {{--@endforeach--}}
-                                        {{--</tr>--}}
-                                        {{--<tr>--}}
-                                            {{--@foreach($result as $point)--}}
-                                                {{--<td>{{ number_format($point->point, 2) }}</td>--}}
-                                            {{--@endforeach--}}
-                                        {{--</tr>--}}
-                                    {{--</table>--}}
                                 @endguest
                             </div>
 
@@ -107,6 +85,10 @@
                         @empty
                             @include('result.list', ['competition'=>$competition])
                         @endforelse
+
+                        @guest
+                                <round-table></round-table>
+                        @endguest
                     </div>
                 @else
                     <div class="alert alert-primary" role="alert">
