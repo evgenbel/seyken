@@ -40,6 +40,15 @@ class CompetitorCompetition extends Model
             ->first()->point;
     }
 
+		public function getPoints(){
+        return DB::table('points')
+            ->where('cс_id', $this->id)
+            ->join('kates', 'kates.id', '=', 'points.kate_id')
+            ->select('round',DB::raw('AVG(point*kates.koef) as point'))
+            ->groupBy('round')
+            ->orderBy('round')->get();
+    }
+
 		public function scopePoint($filter, $round = false){
         if (!$round)
             $round = $this->competition->round;
@@ -48,9 +57,6 @@ class CompetitorCompetition extends Model
             ->join('kates', 'kates.id', '=', 'points.kate_id')
             ->select(DB::raw('AVG(point*kates.koef) as point'))
             ->first()->point;
-//
-//    		return $this->kata?$this->points->where('round', $round)
-//                ->avg('point') * $this->kata->koef:0;
 		}
 
     public function scopeCurrent($query)

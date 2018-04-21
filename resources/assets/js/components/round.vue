@@ -1,15 +1,17 @@
 <template>
     <div class="alert alert-primary" id="round-field">
         Раунд {{ currentRound }}
+        Категория {{ currentGroup }}
     </div>
 </template>
 
 <script>
     export default {
-        props:['round'],
+        props:['round', 'group'],
         data: function(){
           return {
               currentRound: this.round,
+              currentGroup: this.group,
               interval:{}
           }
         },
@@ -25,7 +27,8 @@
         methods: {
             fetchRound: function(){
                 axios.get('api/round').then(function(response){
-                    this.currentRound =  response.data;
+                    this.currentRound =  response.data.round;
+                    this.currentGroup =  response.data.group;
                 }.bind(this), function(response){
                     // error callback
                     console.log(response);

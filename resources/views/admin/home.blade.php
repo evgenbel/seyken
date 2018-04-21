@@ -2,9 +2,11 @@
 
 @section('content')
     <div class="container1">
-        <div class="row justify-content-center">
-            @foreach($list as $round=>$competitors)
-                <h3>Раунд {{ $round }}</h3>
+        <div class="justify-content-center">
+            @foreach($list as $round=>$groups)
+                <h1>Раунд {{ $round }}</h1><br/>
+                @foreach($groups as $group=>$competitors)
+                <h2>Категория {{ $group }}</h2>
                 <form method="post" action="{{ route('disbaledround') }}">
                     @csrf
                     <table class="table">
@@ -30,7 +32,7 @@
                                 @endforeach
                             @endforeach
                         </tr>
-                        @foreach($list[$round] as $k=>$competitor)
+                        @foreach($list[$round][$group] as $k=>$competitor)
                             @if($competitor->disabled_round>0 && $competitor->disabled_round<$round)
                                 @continue;
                             @endif
@@ -67,11 +69,14 @@
                         @endforeach
                     </table>
                     @if ($currentRound==$round)
-                        <a href="{{ route('endround') }}" class="btn btn-primary">Раунд окончен</a>
                         <button class="btn btn-primary">Исключить участников</button>
-                        <a href="{{ route('nextround') }}" class="btn btn-primary">Следующий раунд</a>
                     @endif
                 </form>
+                @endforeach
+                @if ($currentRound==$round)
+                    <a href="{{ route('endround') }}" class="btn btn-primary">Раунд окончен</a>
+                    <a href="{{ route('nextround') }}" class="btn btn-primary">Следующий раунд</a>
+                @endif
             @endforeach
         </div>
     </div>

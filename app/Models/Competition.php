@@ -43,6 +43,11 @@ class Competition extends Model
         return $this->hasMany('App\Models\CompetitorCompetition');
     }
 
+    public function group()
+    {
+        return $this->belongsTo('App\Models\Group');
+    }
+
     public function currentCompetitor()
     {
         return $this->hasMany('App\Models\CompetitorCompetition')

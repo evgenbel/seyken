@@ -1,5 +1,5 @@
 <template>
-    <table class="table">
+    <table class="table table-striped table-sm">
         <tr>
             <th v-for="point in currentPoints">{{ point.name }}</th>
         </tr>

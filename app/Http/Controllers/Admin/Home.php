@@ -30,7 +30,7 @@ class Home extends AdminController
 								}
                 $competitor->list_point = $points;
                 $competitor->point  = round($competitor->getPointRound($r), 2);
-								$result_c[] = (object)[
+								$result_c[$competitor->user->group->name][] = (object)[
 								    'point' => round($competitor->getPointRound($r), 2),
 								    'list_point' => $points,
 								    'disabled_round' => $competitor->disabled_round,
@@ -41,10 +41,13 @@ class Home extends AdminController
                 ];
 								//$competitor;
 						}
-						usort($result_c, function($a1, $a2){
-                $res = ($a2->point??0)-($a1->point??0);
-                return $res>0?1:(($res<0)?-1:0);
-						});
+						foreach ($result_c as &$item){
+                usort($item, function($a1, $a2){
+                    $res = ($a2->point??0)-($a1->point??0);
+                    return $res>0?1:(($res<0)?-1:0);
+                });
+            }
+
 						$result[$r] = $result_c;
 				}
 
@@ -65,6 +68,8 @@ class Home extends AdminController
 
 				$c = CompetitorCompetition::find($id);
 				if ($c){
+				    $c->competition->group_id = $c->user->group_id;
+            $c->competition->save();
 						$c->is_current = 1;
 						$c->save();
 				}

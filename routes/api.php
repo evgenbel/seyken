@@ -19,16 +19,23 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::get('/round', function () {
 		$c = App\Models\Competition::current()->first();
-		return $c->round;
+		return ['round'=>$c->round, 'group'=>$c->group->name];
 });
 
 Route::get('/cinfo', function () {
 		$c = App\Models\Competition::current()->first();
 		if ($c){
 				$cc = $c->currentCompetitor->first();
+
 				if ($cc){
 						$cc->kata;
 						$cc->user;
+            $points = $cc->getPoints();
+            $sum = 0;
+            foreach ($points as $point){
+                $sum += $point->point;
+            }
+            $cc->sum = $sum;
 						$cc->point = $cc->point();
 				}
 		}
@@ -54,16 +61,42 @@ Route::get('/roundResult', function () {
 		    foreach ($c->competitors as $competitor){
 		        if ($competitor->disabled_round>0 && $competitor->disabled_round<$c->round)
 		            continue;
-            $competitor->point = $competitor->getPointRound($c->round);
+		        if ($c->group_id!=$competitor->user->group_id)
+		            continue;
+//            $competitor->point = $competitor->getPointRound($c->round);
+            $points = $competitor->getPoints();
+            $sum = 0;
+            $last_round = 0;
+            foreach($points as $point){
+                $sum += $point->point;
+                $last_round = $point->round;
+            }
+            if ($last_round<$c->round){
+                for($i=$last_round; $i<$c->round; $i++){
+                    $points[$i] = (object)['round'=>$i, 'point'=>0];
+                }
+            }
 		        $result[] = [
+		            'round'   =>  $c->round,
 		            'fio'   =>  $competitor->user->fio,
                 'disabled'  =>  $competitor->disabled_round==$c->round,
 		            'date_birth'   =>  $competitor->user->date_birth,
-		            'point'   =>  $competitor->getPointRound($c->round)
+		            'points'   =>  $points,
+		            'point'   =>  $sum
             ];
         }
         usort($result, function($a1, $a2){
-            $res = ($a2['point']??0)-($a1['point']??0);
+            $point1 = 0;
+            $point2 = 0;
+            if (isset($a1['points']))
+            foreach ($a1['points'] as $point){
+                $point1 += $point->point;
+            }
+            if (isset($a2['points']))
+            foreach ($a2['points'] as $point){
+                $point2 += $point->point;
+            }
+            $res = $point2-$point1;
             return $res>0?1:(($res<0)?-1:0);
         });
 		    foreach ($result as $k=>&$item){

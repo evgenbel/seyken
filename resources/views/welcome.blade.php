@@ -46,7 +46,8 @@
                 </h1>
                 <h3>Проводится с {{ $competition->start->format('d.m.Y')}} по {{ $competition->end->format('d.m.Y') }}</h3>
                 @if($competition->round>0)
-                    <competition-round label="{{ __('Round') }}" round="{{ $competition->round }}"></competition-round>
+                    <competition-round label="{{ __('Round') }}" round="{{ $competition->round }}"
+                                       group="{{ $competition->group->name??'' }}"></competition-round>
                     <div class="block">
                         @guest
 
