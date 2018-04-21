@@ -67,21 +67,22 @@ Route::get('/roundResult', function () {
             $points = $competitor->getPoints();
             $sum = 0;
             $last_round = 0;
+            $res_points = [];
+            for($i=1; $i<=$c->round; $i++){
+                $res_points[$i] = (object)['round'=>$i, 'point'=>0];
+            }
+
             foreach($points as $point){
                 $sum += $point->point;
                 $last_round = $point->round;
-            }
-            if ($last_round<$c->round){
-                for($i=$last_round; $i<$c->round; $i++){
-                    $points[$i] = (object)['round'=>$i, 'point'=>0];
-                }
+                $res_points[$last_round] = $point;
             }
 		        $result[] = [
 		            'round'   =>  $c->round,
 		            'fio'   =>  $competitor->user->fio,
                 'disabled'  =>  $competitor->disabled_round==$c->round,
 		            'date_birth'   =>  $competitor->user->date_birth,
-		            'points'   =>  $points,
+		            'points'   =>  $res_points,
 		            'point'   =>  $sum
             ];
         }
