@@ -2,54 +2,63 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\PointUpdated;
 use App\Events\RoundUpdated;
 use App\Models\Competition;
 use App\Models\CompetitorCompetition;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class WelcomeController extends Controller
 {
-		public function round(){
-				$c = Competition::current()->first();
+		public function test(){
+            DB::enableQueryLog();
+            $c = Competition::current()->first()->competitors->first()->points->first();
 //				$c->round++;
 //				$c->save();
-//				event(new RoundUpdated($c));
+//            dd(DB::getQueryLog());
+//            dd($c->competitor()->get());
+//            var_dump($c->cc_id);
+//            var_dump($c);
+//            $c->competitor()->get();
+//            dd(DB::getQueryLog());
+//            exit;
+            event(new PointUpdated($c));
+            exit('ok');
 		}
 
 		public function index(Competition $c)
 		{
+            $point_sended = false;
+            $currentPoint = 0;
+            $sum = 0;
+            $c = Competition::current()->first();
+            if ($c){
+                $current = $c->currentCompetitor()->with('kata')->with('user')->get()->first();
 
-				$point_sended = false;
-				$resultPoints = [];
-				$sum = 0;
-				$k = 0;
+                if ($current){
+                    foreach ($current->getPoints() as $point){
+                        $sum += $point->point;
+                        if ($point->round == $c->round)
+                            $currentPoint = $point->point;
+                    }
 
-				$c = Competition::current()->first();
-				if ($c){
-						$current = $c->currentCompetitor->first();
-						if ($current){
-								$resultPoints = $current->roundPoints($c->round);
-						}
+                    if (Auth::check()) {
+                        if ($current->is_pointed($c->round, Auth::user()->id)){
+                            $point_sended = true;
+                        }
+                    }
+                }
+            }
 
-						foreach ($resultPoints as $p) {
-								$sum += $p->point;
-								$k++;
-								if (Auth::check()) {
-										if ($p->user_id == Auth::user()->id) {
-												$point_sended = true;
-										}
-								}
-						}
-				}
-
-
-				return view('welcome', [
-						'competition' => $c,
-						'point_sended' => $point_sended,
-						'result' => $resultPoints,
-						'point' => $k > 0 ? (number_format($sum / $k, 2)) : 0,
-				]);
+            return view('welcome', [
+                'competition' => $c,
+                'competitor' => $current,
+                'point_sended' => $point_sended,
+                'point' => round($currentPoint, 2),
+                'sum' => round($sum, 2),
+            ]);
 		}
 
 		public function result(Competition $c)

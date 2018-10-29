@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Competition;
 use App\Models\Competitor;
 use App\Models\Kate;
+use App\Models\Group;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -35,7 +36,8 @@ class Competitions extends AdminController
     {
 				return view('admin.competition.create',[
 						'kata'	=>	Kate::all(),
-						'competitors'	=>	Competitor::all()
+						'competitors'	=>	Competitor::all(),
+						'groups'	=>	Group::all(),
 				]);
     }
 
@@ -55,7 +57,8 @@ class Competitions extends AdminController
 						'name' => $request->name,
 						'start' => Carbon::createFromFormat('d.m.Y', $request->start)->toDateTimeString() ,
 						'end' => Carbon::createFromFormat('d.m.Y', $request->end)->toDateTimeString(),
-						'round' => 1
+						'round' => 1,
+                        'group_id'  =>  $request->group_id
 				]);
 				$competition->kates()->sync($request->kata);;
 				foreach ($request->competitor as $c){

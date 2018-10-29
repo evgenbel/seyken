@@ -29,26 +29,26 @@
         },
         mounted() {
             this.loadData();
-            this.interval = setInterval(function(){
-                this.loadData();
-            }.bind(this), 3000);
+            // this.interval = setInterval(function(){
+            //     this.loadData();
+            // }.bind(this), 3000);
         },
         computed: {
 
         },
         methods: {
             loadData: function(){
-                axios.get('api/roundResult').then(function(response){
-                    this.competitors =  response.data;
-                    this.rounds = [];
-                    for(let i=1; i<=this.competitors[0].round; i++){
-                        this.rounds.push(i);
-                    }
-
-                }.bind(this), function(response){
-                    // error callback
-                    console.log(response);
-                });
+                // axios.get('api/roundResult').then(function(response){
+                //     this.competitors =  response.data;
+                //     this.rounds = [];
+                //     for(let i=1; i<=this.competitors[0].round; i++){
+                //         this.rounds.push(i);
+                //     }
+                //
+                // }.bind(this), function(response){
+                //     // error callback
+                //     console.log(response);
+                // });
             }
         },
         beforeDestroy: function(){

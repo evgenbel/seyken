@@ -11,28 +11,21 @@
         data: function(){
           return {
               currentRound: this.round,
-              currentGroup: this.group,
-              interval:{}
+              currentGroup: this.group
           }
         },
         mounted() {
-            this.fetchRound();
-            this.interval = setInterval(function(){
-                this.fetchRound();
-            }.bind(this), 3000);
+            window.Echo.channel('change-round')
+                .listen('.RoundUpdated', (e) => {
+                    this.currentRound = e.round;
+                    this.currentGroup = e.group;
+                });
         },
         computed: {
 
         },
         methods: {
             fetchRound: function(){
-                axios.get('api/round').then(function(response){
-                    this.currentRound =  response.data.round;
-                    this.currentGroup =  response.data.group;
-                }.bind(this), function(response){
-                    // error callback
-                    console.log(response);
-                });
             }
         },
         beforeDestroy: function(){

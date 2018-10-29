@@ -12,7 +12,7 @@
 */
 
 Route::get('/', 'WelcomeController@index')->name('home');
-Route::get('/round', 'WelcomeController@round');
+Route::get('/test', 'WelcomeController@test');
 Route::post('/', 'WelcomeController@points');
 Route::post('/kata', 'WelcomeController@kata');
 

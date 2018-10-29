@@ -1,0 +1,32 @@
+{
+	"authHost": "seyken.belov",
+	"authEndpoint": "/broadcasting/auth",
+	"clients": [
+		{
+			"appId": "e7aa5b2342bc5cb9",
+			"key": "5ba2784120f652398753812a2db3b13e"
+		}
+	],
+	"database": "redis",
+	"databaseConfig": {
+		"redis": {},
+		"sqlite": {
+			"databasePath": "/database/laravel-echo-server.sqlite"
+		}
+	},
+	"devMode": true,
+	"host": null,
+	"port": "6001",
+	"protocol": "http",
+	"socketio": {},
+	"sslCertPath": "",
+	"sslKeyPath": "",
+	"sslCertChainPath": "",
+	"sslPassphrase": "",
+	"apiOriginAllow": {
+		"allowCors": false,
+		"allowOrigin": "",
+		"allowMethods": "",
+		"allowHeaders": ""
+	}
+}

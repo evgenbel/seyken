@@ -14,7 +14,7 @@ class Competition extends Model
 				'end',
 		];
 
-		protected $fillable = ['name', 'start', 'end', 'round'];
+		protected $fillable = ['name', 'start', 'end', 'round', 'group_id'];
     //
 
 		public static function boot()

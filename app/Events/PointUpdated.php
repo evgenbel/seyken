@@ -3,6 +3,8 @@
 namespace App\Events;
 
 use App\Models\Competition;
+use App\Models\CompetitorCompetition;
+use App\Models\Point;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Broadcasting\PrivateChannel;
@@ -11,22 +13,32 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class RoundUpdated implements ShouldBroadcast
+class PointUpdated implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $round;
-    public $group;
+    public $points;
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct(Competition $model)
+    public function __construct(Point $model)
     {
         //
-				$this->round=$model->round;
-				$this->group=$model->group->name;
+        $competitor = $model->competitor;
+        $round = $competitor->competition->round;
+        $current = 0;
+        $sum = 0;
+        foreach ($competitor->getPoints() as $point){
+            $sum += $point->point;
+            if ($point->round == $round)
+                $current = $point->point;
+        }
+        $this->points = [
+            'current'   =>  round($current, 2),
+            'sum'   =>  round($sum, 2),
+        ];
     }
 
     /**
@@ -36,12 +48,12 @@ class RoundUpdated implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return ['change-round'];
+        return ['change-competitor'];
     }
 
     //Транслировать короткое имя события без полного namespace path
     public function broadcastAs()
     {
-        return ['RoundUpdated'];
+        return ['PointUpdated'];
     }
 }

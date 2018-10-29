@@ -3,6 +3,7 @@
 namespace App\Events;
 
 use App\Models\Competition;
+use App\Models\CompetitorCompetition;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Broadcasting\PrivateChannel;
@@ -11,22 +12,23 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class RoundUpdated implements ShouldBroadcast
+class UserUpdated implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $round;
-    public $group;
+    public $user;
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct(Competition $model)
+    public function __construct(CompetitorCompetition $model)
     {
         //
-				$this->round=$model->round;
-				$this->group=$model->group->name;
+        $user = $model->user;
+        if (isset($model->kata))
+            $kataname = $model->kata->name;
+        $this->user = $model;
     }
 
     /**
@@ -36,12 +38,12 @@ class RoundUpdated implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return ['change-round'];
+        return ['change-competitor'];
     }
 
     //Транслировать короткое имя события без полного namespace path
     public function broadcastAs()
     {
-        return ['RoundUpdated'];
+        return ['UserUpdated'];
     }
 }

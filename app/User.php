@@ -31,8 +31,8 @@ class User extends Authenticatable
         return $this->hasMany('App\Models\TypePoint');
     }
 
-		public function competitions()
-		{
-				return $this->belongsToMany('App\Models\Competititon');
-		}
+    public function competitions()
+    {
+            return $this->belongsToMany('App\Models\Competititon');
+    }
 }

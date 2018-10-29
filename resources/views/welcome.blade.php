@@ -55,12 +55,12 @@
                             <h2>Судья {{ Auth::user()->name }}</h2>
                         @endguest
 
-                        @forelse($competition->currentCompetitor as $c)
+                        @if($competitor)
                             <div id="result-block">
                                 <competition-info
-                                        :user='{{ $c->user }}'
-                                        :c='{{ $c }}'
+                                        :c='{{ $competitor }}'
                                         :point="{{ $point }}"
+                                        :itog="{{ $sum }}"
                                 ></competition-info>
 
                                 @guest
@@ -83,9 +83,9 @@
                                     </div>
                                 @endif
                             @endguest
-                        @empty
+                        @else
                             @include('result.list', ['competition'=>$competition])
-                        @endforelse
+                        @endif
 
                         @guest
                                 <round-table></round-table>
