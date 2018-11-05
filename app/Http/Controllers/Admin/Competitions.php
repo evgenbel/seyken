@@ -57,8 +57,7 @@ class Competitions extends AdminController
 						'name' => $request->name,
 						'start' => Carbon::createFromFormat('d.m.Y', $request->start)->toDateTimeString() ,
 						'end' => Carbon::createFromFormat('d.m.Y', $request->end)->toDateTimeString(),
-						'round' => 1,
-                        'group_id'  =>  $request->group_id
+						'round' => 1
 				]);
 				$competition->kates()->sync($request->kata);;
 				foreach ($request->competitor as $c){

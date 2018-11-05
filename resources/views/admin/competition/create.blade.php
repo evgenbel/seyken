@@ -105,24 +105,6 @@
                     </div>
                 </div>
 
-                <div class="form-group row">
-                    <label for="end" class="col-md-4 col-form-label text-md-right">Группа</label>
-
-                    <div class="col-md-6">
-                        <select name="group_id" class="chosen">
-                            @foreach($groups as $item)
-                                <option value="{{ $item->id }}">{{ $item->name }}</option>
-                            @endforeach
-                        </select>
-
-                        @if ($errors->has('competitor'))
-                            <span class="invalid-feedback">
-                                        <strong>{{ $errors->first('competitor') }}</strong>
-                                    </span>
-                        @endif
-                    </div>
-                </div>
-
                 <div class="form-group row mb-0">
                     <div class="col-md-8 offset-md-4">
                         <button type="submit" class="btn btn-primary">
