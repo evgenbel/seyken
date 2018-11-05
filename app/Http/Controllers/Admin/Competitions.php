@@ -118,12 +118,13 @@ class Competitions extends AdminController
 				$competition->end =  Carbon::createFromFormat('d.m.Y', $request->end)->toDateTimeString();
 				$competition->kates()->sync($request->kata);
 //				$competition->users()->sync($request->user);
-				foreach ($request->competitor as $c){
-						$competition->competitors()->create([
-								'competitor_id'=>$c,
-								'weight'	=>	1
-						]);
-				}
+                if (!empty($request->competitor))
+                    foreach ($request->competitor as $c) {
+                        $competition->competitors()->create([
+                            'competitor_id' => $c,
+                            'weight' => 1
+                        ]);
+                    }
 				$competition->save();
 				return redirect(route('admin.competition'));
     }

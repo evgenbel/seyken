@@ -71,11 +71,18 @@
                             @guest
 
                             @else
-                                @if(!Auth::user()->is_admin && !$point_sended)
+                                @if(!Auth::user()->is_admin && $point_sended)
                                     <div id="points-set">
-                                        @include('forms.kata', ['kates' => $competition->kates, 'cc'=>$c])
+                                        @if(Auth::user()->set_kata)
+                                            <kata
+                                            url="{{url('/kata')}}"
+                                            :kates="{{$competition->kates}}"
+                                            :c="{{$competitor}}"
+                                            ></kata>
+                                        @endif
+                                        {{--@include('forms.kata', ['kates' => $competition->kates, 'cc'=>$competitor])--}}
 
-                                        @include('forms.point', ['cc'=>$c])
+                                        @include('forms.point', ['cc'=>$competitor])
 
                                         @foreach ($errors->all() as $error)
                                             <p>{{ $error }}</p>

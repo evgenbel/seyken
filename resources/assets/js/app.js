@@ -24,6 +24,7 @@ Vue.component('competition-round', require('./components/round.vue'));
 Vue.component('competition-info', require('./components/info.vue'));
 Vue.component('table-result', require('./components/result-table.vue'));
 Vue.component('round-table', require('./components/round-table.vue'));
+Vue.component('kata', require('./components/kata.vue'));
 
 const app = new Vue({
     el: '#app',

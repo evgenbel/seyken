@@ -87,6 +87,6 @@ class CompetitorCompetition extends Model
     }
 
     public function is_pointed($round, $user){
-        return $this->points()->where('round', $round)->where('user_id', $user)->get();
+        return $this->points()->where('cc_id', $this->id)->where('round', $round)->where('user_id', $user)->get();
     }
 }

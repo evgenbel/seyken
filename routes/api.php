@@ -80,7 +80,7 @@ Route::get('/roundResult', function () {
 		        $result[] = [
 		            'round'   =>  $c->round,
 		            'fio'   =>  $competitor->user->fio,
-                'disabled'  =>  $competitor->disabled_round==$c->round,
+                    'disabled'  =>  $competitor->disabled_round==$c->round,
 		            'date_birth'   =>  $competitor->user->date_birth,
 		            'points'   =>  $res_points,
 		            'point'   =>  $sum

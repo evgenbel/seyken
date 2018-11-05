@@ -34,6 +34,7 @@ class WelcomeController extends Controller
             $currentPoint = 0;
             $sum = 0;
             $c = Competition::current()->first();
+            $current = false;
             if ($c){
                 $current = $c->currentCompetitor()->with('kata')->with('user')->get()->first();
 
@@ -45,9 +46,8 @@ class WelcomeController extends Controller
                     }
 
                     if (Auth::check()) {
-                        if ($current->is_pointed($c->round, Auth::user()->id)){
-                            $point_sended = true;
-                        }
+                        $point_sended = $current->is_pointed($c->round, Auth::user()->id);
+                        $point_sended = !empty($point_sended);
                     }
                 }
             }
